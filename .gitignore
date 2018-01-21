@@ -1,0 +1,4 @@
+/lib
+configuration.py
+jupyter_micropython_kernel
+.ipynb_checkpoints

@@ -29,19 +29,31 @@ configuration.py:
 reboot:
 	ampy -p /dev/ttyUSB0 reset
  
-jupiter_build: jupyter_micropython_kernel/README.md
+jupiter: jupyter_micropython_kernel/README.md
 
 jupyter_micropython_kernel/README.md:
+	lib/bin/pip install -U jupyter
 	git clone https://github.com/goatchurchprime/jupyter_micropython_kernel.git
 	lib/bin/pip install -e jupyter_micropython_kernel
 	lib/bin/python -m jupyter_micropython_kernel.install
+	make widgets
+	make turtle
 
 .PHONY: virtualenv
 virtualenv: lib/bin/activate
 
 lib/bin/activate:
 	python3 -mvenv lib
+	lib/bin/pip install -U pip wheel
 	lib/bin/pip install esptool adafruit-ampy
 
 .PHONY: bootstrap
-bootstrap: virtualenv jupiter_build
+bootstrap: virtualenv jupiter
+
+widgets:
+	pip install ipywidgets
+	jupyter nbextension enable --py widgetsnbextension
+	pip install https://github.com/takluyver/mobilechelonian/archive/master.zip
+
+turtle:
+	pip install https://github.com/takluyver/mobilechelonian/archive/master.zip
